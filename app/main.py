@@ -10,4 +10,4 @@ def home():
 @app.post("/tasks")
 def create_task(task: TaskCreateRequest):
     print(task)
-    return {task}   
+    return task 
