@@ -11,3 +11,19 @@ def home():
 def create_task(task: TaskCreateRequest):
     print(task)
     return task 
+@app.get("/tasks/{task_id}")
+def get_task(task_id:int):
+    return {
+        "status":task_id
+    }
+@app.get("/tasks")
+def get_tasks(
+    completed: bool,
+    page: int,
+    sort: str
+):
+    return {
+        "completed":completed,
+        "page": page,
+        "sort": sort
+    }
