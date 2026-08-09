@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.schema import TaskCreateRequest
+from app.schema import TaskResponse
 app=FastAPI()
 print("Creating fastAPI application.")
 @app.get("/")
@@ -7,10 +8,10 @@ def home():
     return {
         "status":"running"
     }
-@app.post("/tasks")
-def create_task(task: TaskCreateRequest):
-    print(task)
-    return task 
+    @app.post("/tasks")
+    def create_task(task: TaskCreateRequest):
+        print(task)
+        return task 
 @app.get("/tasks/{task_id}")
 def get_task(task_id:int):
     return {
@@ -27,3 +28,6 @@ def get_tasks(
         "page": page,
         "sort": sort
     }
+@app.post("/tasks", response_model= TaskResponse)
+def post_response(task: TaskCreateRequest):
+    return task
