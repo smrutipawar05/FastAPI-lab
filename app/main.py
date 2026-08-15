@@ -1,6 +1,8 @@
+from task import Task
 from fastapi import FastAPI
-from app.schema import TaskCreateRequest
-from app.schema import TaskResponse
+from schema import TaskCreateRequest
+from schema import TaskResponse
+from SqliteRepository import SqliteRepository
 app=FastAPI()
 print("Creating fastAPI application.")
 @app.get("/")
@@ -31,3 +33,4 @@ def get_tasks(
 @app.post("/tasks", response_model= TaskResponse)
 def post_response(task: TaskCreateRequest):
     return task
+
