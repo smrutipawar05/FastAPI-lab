@@ -31,11 +31,43 @@ class SqliteRepository(TaskRepository):
                       ,row_data["completed"],row_data["created_at"],row_data["updated_at"])
         return None
     def find_all(self):
-        pass
+        SQL='''SELECT * FROM tasks'''
+        self.cursor.execute(SQL)
+        rows=self.cursor.fetchall()
+        rows_returned=[]
+        for row in rows:
+            row_data=dict(row)
+            task=Task(row_data["task_id"],row_data["title"],row_data["priority"]
+                      ,row_data["completed"],row_data["created_at"],row_data["updated_at"])
+            rows_returned.append(task)
+        return rows_returned
+            
     def update(self,task):
-        pass
+        SQL='''UPDATE tasks
+        SET title=?,
+            priority=?,
+            completed=?,
+            updated_at=CURRENT_TIMESTAMP
+        WHERE task_id=?
+        RETURNING *'''
+        self.cursor.execute(SQL,(task.title,task.priority,task.completed,task.task_id))
+        row=self.cursor.fetchone()
+        if row:
+            row_data=dict(row)
+            task.title=row_data["title"]
+            task.priority=row_data["priority"]
+            task.completed=row_data["completed"]
+            task.updated_at=row_data["updated_at"]
+            self.connection.commit()
+        return task
     def delete(self,task_id):
-        pass
+        task=self.find(task_id)
+        if task:
+            SQL='''DELETE FROM tasks 
+            WHERE task_id=?'''
+            self.cursor.execute(SQL,(task_id,))
+            self.connection.commit()
+        return task
     def save(self,task):
         SQL='''INSERT INTO tasks(title,priority,completed)
             VALUES(?,?,?)
@@ -51,7 +83,28 @@ class SqliteRepository(TaskRepository):
         return task
 repo=SqliteRepository(":memory:")
 task=Task(None,"Study","High",False,None,None)
+task2=Task(None,"Gym","Medium",False,None,None)
 saved_task=repo.save(task)
+repo.save(task2)
+print("SAVED")
 print(saved_task.__dict__)
 task_find=repo.find(1)
-print(task_find)
+print("FIND")
+print(task_find.__dict__)
+tasks=repo.find_all()
+print("ALL:")
+for task in tasks:
+    print(task.__dict__)    
+task.title="FastAPI"
+task.priority="Medium"
+task.completed=True
+repo.update(task)
+print("UPDATED:")
+print(task.__dict__)
+deleted=repo.delete(1)
+print("DELETED:")
+print(deleted.__dict__)
+tasks=repo.find_all()
+print("ALL:")
+for task in tasks:
+    print(task.__dict__)  
