@@ -81,30 +81,30 @@ class SqliteRepository(TaskRepository):
             task.updated_at=row_data["updated_at"]
             self.connection.commit()
         return task
-repo=SqliteRepository(":memory:")
-task=Task(None,"Study","High",False,None,None)
-task2=Task(None,"Gym","Medium",False,None,None)
-saved_task=repo.save(task)
-repo.save(task2)
-print("SAVED")
-print(saved_task.__dict__)
-task_find=repo.find(1)
-print("FIND")
-print(task_find.__dict__)
-tasks=repo.find_all()
-print("ALL:")
-for task in tasks:
-    print(task.__dict__)    
-task.title="FastAPI"
-task.priority="Medium"
-task.completed=True
-repo.update(task)
-print("UPDATED:")
-print(task.__dict__)
-deleted=repo.delete(1)
-print("DELETED:")
-print(deleted.__dict__)
-tasks=repo.find_all()
-print("ALL:")
-for task in tasks:
-    print(task.__dict__)  
+# repo=SqliteRepository(":memory:")
+# task=Task(None,"Study","High",False,None,None)
+# task2=Task(None,"Gym","Medium",False,None,None)
+# saved_task=repo.save(task)
+# repo.save(task2)
+# print("SAVED")
+# print(saved_task.__dict__)
+# task_find=repo.find(1)
+# print("FIND")
+# print(task_find.__dict__)
+# tasks=repo.find_all()
+# print("ALL:")
+# for task in tasks:
+#     print(task.__dict__)    
+# task.title="FastAPI"
+# task.priority="Medium"
+# task.completed=True
+# repo.update(task)
+# print("UPDATED:")
+# print(task.__dict__)
+# deleted=repo.delete(1)
+# print("DELETED:")
+# print(deleted.__dict__)
+# tasks=repo.find_all()
+# print("ALL:")
+# for task in tasks:
+#     print(task.__dict__)  
