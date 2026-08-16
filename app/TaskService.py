@@ -1,5 +1,5 @@
-from task import Task
-from SqliteRepository import SqliteRepository
+from app.task import Task
+from app.SqliteRepository import SqliteRepository
 
 class TaskService:
     def __init__(self,repository):
@@ -9,7 +9,7 @@ class TaskService:
         return self.repository.save(task)
     def get_task(self,task_id):
         return self.repository.find(task_id)
-    def get_tasks(self):
+    def get_tasks(self,completed=None):
         return self.repository.find_all()
     def update_task(self,task_id,title,priority,completed):
         task=self.get_task(task_id)

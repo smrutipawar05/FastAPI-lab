@@ -4,7 +4,7 @@ class TaskCreateRequest(BaseModel):
     priority: str
     completed: bool
 class TaskResponse(BaseModel):
-    tasks_id: int
+    task_id: int
     title: str
     priority: str
     completed: bool

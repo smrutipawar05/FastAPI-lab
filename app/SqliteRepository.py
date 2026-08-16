@@ -1,6 +1,6 @@
-from TaskRepository import TaskRepository
+from app.TaskRepository import TaskRepository
 import sqlite3
-from task import Task
+from app.task import Task
 class SqliteRepository(TaskRepository):
     def __init__(self,database):
         self.connection=sqlite3.connect(database)
@@ -28,11 +28,16 @@ class SqliteRepository(TaskRepository):
         if row:
             row_data=dict(row)
             return Task(row_data["task_id"],row_data["title"],row_data["priority"]
-                      ,row_data["completed"],row_data["created_at"],row_data["updated_at"])
+                      ,bool(row_data["completed"]),row_data["created_at"],row_data["updated_at"])
         return None
-    def find_all(self):
-        SQL='''SELECT * FROM tasks'''
-        self.cursor.execute(SQL)
+    def find_all(self,completed=None):
+        if completed is None:
+            SQL='''SELECT * FROM tasks'''
+            self.cursor.execute(SQL)
+        else:
+            SQL='''SELECT * FROM tasks
+                WHERE completed=?'''
+            self.cursor.execute(SQL,(completed,))
         rows=self.cursor.fetchall()
         rows_returned=[]
         for row in rows:
